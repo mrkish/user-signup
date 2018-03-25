@@ -6,6 +6,11 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 
+def verify_email():
+#    if email1 not email2:
+    return render_template('base.html')
+
+
 @app.route('/', methods=['POST','GET'])
 def signup():
     
