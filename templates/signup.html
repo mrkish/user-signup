@@ -1,21 +1,28 @@
 {% extends 'base.html' %}
-
 {% block content %}
-     <h1>User Signup</h1>
-     <form method='post'>
-     User name:
-        <input type="text" />
-        <p></p>
-    Email:
-        <input type="email1" />
-        <p id="email1_error">{{ email1_error }}</p>
-    Verify email:
-        <input type="email2" />
-        <p id="email2_error">{{ email2_error }}</p>
-    Password:
-        <input type="password" />
-        <input type="submit" value="Submit" />
-        <p id="password_error">{{ password_error }}</p>         
-     </form>
-
+    <h1>User Signup</h1>
+    <p>{{ email_error }}</p>
+    <p>{{ password_error }}</p>
+    <form method='post'>
+    <table>
+    <tr>
+        <td>User name:</td>
+        <td><input type="text" value="{{user_name}}"/></td>
+    </tr>
+    <tr>
+        <td>Password:</td>
+        <td><input type="password" value="{{password1}}"/></td>
+    </tr>
+    <tr>
+        <td>Verify Password:</td>
+        <td><input type="password" value="{{password2}}" /></td>
+    </tr>
+    <tr>
+        <td>Email (optional):</td>
+        <td><input type="email" value="{{email}}"/></td>
+    </tr>    
+    <tr>
+        <td><input type="submit" value="Submit" /></td>
+    </tr>
+    </form>
 {% endblock %}
