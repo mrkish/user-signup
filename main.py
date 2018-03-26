@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template
 import cgi
 import os
+import re
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -8,12 +9,25 @@ app.config['DEBUG'] = True
 
 def verify_email(email):
     # regex check to see that the email is valid
-    return True
+    valid_email = re.compile('\w.+@\w+.(net|edu|com|org)')
+    if valid_email.match(email):
+        return True
+    else:
+        return False        
 
 def verify_password(pass1, pass2):
+    valid_pass = re.compile('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d@$#!%*?&]{8,}')
+
+    if pass1 == pass2:
+        if valid_pass.match(pass1):
+            return True
+        else:
+            password_error = """Please enter a password of 8 characters or longer with 
+                              at least one upper and lowercase character, one special 
+                              character, and one digit."""
+            return False
 
     return True 
-    
     
 
 @app.route('/', methods=['POST','GET'])
