@@ -56,7 +56,7 @@ def signup():
                     else: # yo email is bogus! do us a real one
                         email_error = 'Please enter a valid email'
                         email = '' # wipes email field
-                        return render_tempalte('signup.html', email_error=email_error, email=email)
+                        return render_template('signup.html', email_error=email_error, email=email)
                 else: # no email, no problem.
                     return render_template('welcome.html', user=user)
             else: # password didn't meet the security requirements; display those, start again
