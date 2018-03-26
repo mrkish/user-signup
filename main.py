@@ -49,7 +49,7 @@ def signup():
         # do passwords match?
         if pass1 == pass2: # passwords match!
             # does the password meet our security requirements?
-            if verify_password(pass1) == True: # password meets requirements
+            if verify_password(pass1, pass2) == True: # password meets requirements
                 if email: # if they input an email
                     if verify_email(email) == True: # is that email valid?
                         return render_template('welcome.html', user=user)
