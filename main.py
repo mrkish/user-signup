@@ -9,53 +9,69 @@ app.config['DEBUG'] = True
 
 def verify_email(email):
     # regex check to see that the email is valid
+    # only admits certain TLDS. 
     valid_email = re.compile('\w.+@\w+.(net|edu|com|org)')
+
     if valid_email.match(email):
         return True
     else:
         return False        
 
 def verify_password(pass1, pass2):
+    # requirements: 8 length, 1 special, 1 uppercase, 1 digit
     valid_pass = re.compile('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d@$#!%*?&]{8,}')
-
-    if pass1 == pass2:
+    
+    if pass1 == pass2: # double checking equality
         if valid_pass.match(pass1):
             return True
         else:
-            password_error = """Please enter a password of 8 characters or longer with 
-                              at least one upper and lowercase character, one special 
-                              character, and one digit."""
             return False
-
-    return True 
-    
-
+    else:
+        return False
 
 @app.route('/', methods=['POST','GET'])
 def signup():
-    user = ''
-    pass1 = ''
-    pass2 = ''
-    email = ''
+#    user = ''
+#    pass1 = ''
+#    pass2 = ''
+#    email = ''
 
     email_error = ''
     password_error = ''
     
     if request.method == "POST":
+        # assign variables from form input
         user = cgi.escape(request.form['user'])
         pass1 = cgi.escape(request.form['pass1'])
         pass2 = cgi.escape(request.form['pass2'])
         email = cgi.escape(request.form['email'])
 
-        if (verify_email(email) == True and
-            verify_password(pass1, pass2) == True):
-            
-            return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
-
-        return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)    
+        # do passwords match?
+        if pass1 == pass2: # passwords match!
+            # does the password meet our security requirements?
+            if verify_password(pass1) == True: # password meets requirements
+                if email: # if they input an email
+                    if verify_email(email) == True: # is that email valid?
+                        return render_template('welcome.html', user=user)
+                    else: # yo email is bogus! do us a real one
+                        email_error = 'Please enter a valid email'
+                        email = '' # wipes email field
+                        return render_tempalte('signup.html', email_error=email_error, email=email)
+                else: # no email, no problem.
+                    return render_template('welcome.html', user=user)
+            else: # password didn't meet the security requirements; display those, start again
+                password_error = """Password requirements: 8 length, 1 digit, 1 uppercase,
+                                and one special character."""
+                pass1 = '' # wipes password fields
+                pass2 = ''
+                return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
+        else: # fat fingers warning
+            password_error = 'Passwords do not match.'
+            pass1 = ''
+            pass2 = ''
+            return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
 
     return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
-
 
 
 if __name__ == "__main__":
