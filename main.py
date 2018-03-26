@@ -30,24 +30,31 @@ def verify_password(pass1, pass2):
     return True 
     
 
+
 @app.route('/', methods=['POST','GET'])
 def signup():
+    user = ''
+    pass1 = ''
+    pass2 = ''
+    email = ''
 
     email_error = ''
     password_error = ''
     
     if request.method == "POST":
-        user = cgi.escape(request.form['user_name'])
-        email = request.form['email']
-        pass1 = request.form['password1']
-        pass2 = request.form['passowrd2']
+        user = cgi.escape(request.form['user'])
+        pass1 = cgi.escape(request.form['pass1'])
+        pass2 = cgi.escape(request.form['pass2'])
+        email = cgi.escape(request.form['email'])
 
         if (verify_email(email) == True and
             verify_password(pass1, pass2) == True):
             
-            return render_template('signup.html')
+            return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
 
-    return render_template('signup.html')
+        return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)    
+
+    return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
 
 
 
