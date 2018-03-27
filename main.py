@@ -60,7 +60,7 @@ def signup():
                 else: # no email, no problem.
                     return render_template('welcome.html', user=user)
             else: # password didn't meet the security requirements; display those, start again
-                password_error = """Password requirements: 8 length, 1 digit, 1 uppercase,
+                password_error = """Password requirements: 8-20 length, 1 digit, 1 uppercase,
                                 and one special character. Because I can."""
                 pass1 = '' # wipes password fields
                 pass2 = ''
