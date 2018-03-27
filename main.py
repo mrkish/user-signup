@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 def verify_email(email):
     # regex check to see that the email is valid
     # only admits certain TLDS. 
-    valid_email = re.compile('\w.+@\w+.(net|edu|com|org)')
+    valid_email = re.compile('\w.+@\w+.(net|edu|com|org){3,20}')
 
     if valid_email.match(email):
         return True
@@ -19,7 +19,7 @@ def verify_email(email):
 
 def verify_password(pass1, pass2):
     # requirements: 8 length, 1 special, 1 uppercase, 1 digit
-    valid_pass = re.compile('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d@$#!%*?&]{8,}')
+    valid_pass = re.compile('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d@$#!%*?&]{8,20}')
     
     if pass1 == pass2: # double checking equality
         if valid_pass.match(pass1):
@@ -54,7 +54,7 @@ def signup():
                     if verify_email(email) == True: # is that email valid?
                         return render_template('welcome.html', user=user)
                     else: # yo email is bogus! do us a real one
-                        email_error = 'Please enter a valid email. No funny TLDs.'
+                        email_error = 'Please enter a valid email. No funny TLDs. Between 3-20 characters.'
                         email = '' # wipes email field
                         return render_template('signup.html', email_error=email_error, email=email)
                 else: # no email, no problem.
