@@ -38,7 +38,53 @@ def signup():
 
     email_error = ''
     password_error = ''
-    
+    password_match_error = ''
+
+    if request.method == 'POST': # User submits data
+        # assign variables from form input
+        user = cgi.escape(request.form['user'])
+        pass1 = cgi.escape(request.form['pass1'])
+        pass2 = cgi.escape(request.form['pass2'])
+        email = cgi.escape(request.form['email'])
+
+        if not pass1 == pass2:
+            # passwords don't match; set error message and wipe variable
+            password_match_error = 'Passwords do not match. (Copy and paste, yo)'
+            pass1 = ''
+            pass2 = ''
+
+        if not verify_email(email):
+            # invalid email, set error message and wipe variable
+            email_error = 'Please enter a valid email. No funny TLDs. Between 3-20 characters.'
+            email = ''
+
+        if not verify_password(pass1, pass2):
+            # password doesn't meet requirements; set error and wipe variables
+            password_error = """Password requirements: 8-20 length, 1 digit, 1 uppercase,
+                                and one special character."""
+            pass1 = ''
+            pass2 = ''
+
+        # There's an error, so repopulate fields and let user start over
+        if email_error or password_error or email_error:
+            return render_template('signup.html', user=user, email=email, pass1=pass1, pass2=pass2, 
+                            email_error=email_error, password_error=password_error, 
+                            password_match_error=password_match_error,
+                            )
+
+        # happy path; user wins, passes go, collects $200 (but not from me)
+        # allows for rendering regardless of there being an email entered or not
+        return render_template('welcome.html', user=user)                    
+
+    # Draws an empty form from empty strings above
+    return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
+
+
+if __name__ == "__main__":
+    app.run()
+
+
+'''    # Attempting to refactor this section to simpler logic with slightly different error handling.
     if request.method == "POST":
         # assign variables from form input
         user = cgi.escape(request.form['user'])
@@ -70,9 +116,4 @@ def signup():
             pass1 = ''
             pass2 = ''
             return render_template('signup.html', user=user, email=email, password_error=password_error, pass1=pass1, pass2=pass2)
-
-    return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
-
-
-if __name__ == "__main__":
-    app.run()
+'''
