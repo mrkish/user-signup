@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>User Signup</h1>
-    <p>{{ email_error }}</p>
-    <p>{{ password_error }}</p>
     <form method='post'>
     <table>
     <tr>
@@ -11,7 +9,7 @@
     </tr>
     <tr>
         <td>Password:</td>
-        <td><input type="password" name="pass1" value="{{pass1}}" /><span>{{password_error}}</span></td>
+        <td><input type="password" name="pass1" value="{{pass1}}" /><span class="error">{{password_error}}</span></td>
     </tr>
     <tr>
         <td>Verify Password:</td>
@@ -19,7 +17,7 @@
     </tr>
     <tr>
         <td>Email (optional):</td>
-        <td><input type="email" name="email" value="{{email}}" /><span>{{email_error}}</span></td>
+        <td><input type="email" name="email" value="{{email}}" /><span class="error">{{email_error}}</span></td>
     </tr>    
     <tr>
         <td><input type="submit" value="Submit" /></td>

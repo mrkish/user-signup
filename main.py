@@ -31,10 +31,10 @@ def verify_password(pass1, pass2):
 
 @app.route('/', methods=['POST','GET'])
 def signup():
-#    user = ''
-#    pass1 = ''
-#    pass2 = ''
-#    email = ''
+    user = ''
+    pass1 = ''
+    pass2 = ''
+    email = ''
 
     email_error = ''
     password_error = ''
@@ -54,19 +54,19 @@ def signup():
                     if verify_email(email) == True: # is that email valid?
                         return render_template('welcome.html', user=user)
                     else: # yo email is bogus! do us a real one
-                        email_error = 'Please enter a valid email'
+                        email_error = 'Please enter a valid email. No funny TLDs.'
                         email = '' # wipes email field
                         return render_template('signup.html', email_error=email_error, email=email)
                 else: # no email, no problem.
                     return render_template('welcome.html', user=user)
             else: # password didn't meet the security requirements; display those, start again
                 password_error = """Password requirements: 8 length, 1 digit, 1 uppercase,
-                                and one special character."""
+                                and one special character. Because I can."""
                 pass1 = '' # wipes password fields
                 pass2 = ''
                 return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
         else: # fat fingers warning
-            password_error = 'Passwords do not match.'
+            password_error = 'Passwords do not match. (Copy and paste, yo)'
             pass1 = ''
             pass2 = ''
             return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
