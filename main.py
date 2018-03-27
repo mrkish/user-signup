@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 def verify_email(email):
     # regex check to see that the email is valid
     # only admits certain TLDS. 
-    valid_email = re.compile('\w.+@\w+.(net|edu|com|org){3,20}')
+    valid_email = re.compile('\w.+@\w+.(net|edu|com|org)')
 
     if valid_email.match(email):
         return True
@@ -64,12 +64,12 @@ def signup():
                                 and one special character. Because I can."""
                 pass1 = '' # wipes password fields
                 pass2 = ''
-                return render_template('signup.html', user=user, password_error=password_error, pass1=pass1, pass2=pass2)
+                return render_template('signup.html', user=user, email=email, password_error=password_error, pass1=pass1, pass2=pass2)
         else: # fat fingers warning
             password_error = 'Passwords do not match. (Copy and paste, yo)'
             pass1 = ''
             pass2 = ''
-            return render_template('signup.html', user=user, password_error=password_error, pass1=pass1, pass2=pass2)
+            return render_template('signup.html', user=user, email=email, password_error=password_error, pass1=pass1, pass2=pass2)
 
     return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
 
