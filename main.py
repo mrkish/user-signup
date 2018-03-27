@@ -56,7 +56,7 @@ def signup():
                     else: # yo email is bogus! do us a real one
                         email_error = 'Please enter a valid email. No funny TLDs. Between 3-20 characters.'
                         email = '' # wipes email field
-                        return render_template('signup.html', email_error=email_error, email=email)
+                        return render_template('signup.html', user=user, email_error=email_error, email=email)
                 else: # no email, no problem.
                     return render_template('welcome.html', user=user)
             else: # password didn't meet the security requirements; display those, start again
@@ -64,12 +64,12 @@ def signup():
                                 and one special character. Because I can."""
                 pass1 = '' # wipes password fields
                 pass2 = ''
-                return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
+                return render_template('signup.html', user=user, password_error=password_error, pass1=pass1, pass2=pass2)
         else: # fat fingers warning
             password_error = 'Passwords do not match. (Copy and paste, yo)'
             pass1 = ''
             pass2 = ''
-            return render_template('signup.html', password_error=password_error, pass1=pass1, pass2=pass2)
+            return render_template('signup.html', user=user, password_error=password_error, pass1=pass1, pass2=pass2)
 
     return render_template('signup.html',user=user, pass1=pass1, pass2=pass2,email=email)
 
