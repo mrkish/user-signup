@@ -8,9 +8,10 @@ app.config['DEBUG'] = True
 
 
 def verify_email(email):
+    '''Checks for valid email via regex; returns a bool'''
     # regex check to see that the email is valid
     # only admits certain TLDS. 
-    valid_email = re.compile('\w.+@\w+.(net|edu|com|org)')
+    valid_email = re.compile('\w.+@\w+.(net|edu|com|org){3,}')
 
     if valid_email.match(email):
         return True
@@ -18,14 +19,13 @@ def verify_email(email):
         return False        
 
 def verify_password(pass1, pass2):
-    # requirements: 8 length, 1 special, 1 uppercase, 1 digit
+    '''Checks for password symmetry and min. requirements via regex; returns a bool.'''
+    # requirements: 8-20 length, 1 special, 1 uppercase, 1 digit
     valid_pass = re.compile('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d@$#!%*?&]{8,20}')
     
-    if pass1 == pass2: # double checking equality
-        if valid_pass.match(pass1):
-            return True
-        else:
-            return False
+    # double checking equality and regex match
+    if pass1 == pass2 and valid_pass.match(pass1):
+        return True
     else:
         return False
 
@@ -67,10 +67,7 @@ def signup():
 
         # There's an error, so repopulate fields and let user start over
         if email_error or password_error or email_error:
-            return render_template('signup.html', user=user, email=email, pass1=pass1, pass2=pass2, 
-                            email_error=email_error, password_error=password_error, 
-                            password_match_error=password_match_error,
-                            )
+            return render_template('signup.html', user=user, email=email, pass1=pass1, pass2=pass2, email_error=email_error, password_error=password_error, password_match_error=password_match_error) # var=var=var=error=error=...
 
         # happy path; user wins, passes go, collects $200 (but not from me)
         # allows for rendering regardless of there being an email entered or not
@@ -83,8 +80,10 @@ def signup():
 if __name__ == "__main__":
     app.run()
 
-
-'''    # Attempting to refactor this section to simpler logic with slightly different error handling.
+# Original handling logic. Decided to refactor this using "guard clauses" after reading a blog
+# Changes also made it easy to display all possible error messages simeltaneously as
+# the messages are now set outside of a nested if with a return
+''' 
     if request.method == "POST":
         # assign variables from form input
         user = cgi.escape(request.form['user'])
