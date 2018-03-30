@@ -11,7 +11,7 @@ def verify_email(email):
     '''Checks for valid email via regex; returns a bool'''
     # regex check to see that the email is valid
     # only admits certain TLDS. 
-    valid_email = re.compile('\w.+@\w+.(net|edu|com|org){3,}')
+    valid_email = re.compile('(\w.+@\w+.(net|edu|com|org)')
 
     if valid_email.match(email):
         return True
@@ -50,23 +50,29 @@ def signup():
         if not pass1 == pass2:
             # passwords don't match; set error message and wipe variable
             password_match_error = 'Passwords do not match. (Copy and paste, yo)'
-            pass1 = ''
-            pass2 = ''
+#            pass1 = ''
+#            pass2 = ''
 
-        if not verify_email(email):
-            # invalid email, set error message and wipe variable
-            email_error = 'Please enter a valid email. No funny TLDs. Between 3-20 characters.'
-            email = ''
+        if email: # Build an email error message
+            if len(email) < 3 or len(email) > 20:
+                email_error = 'Emails must be between 3-20 characters.'
+
+            if not verify_email(email):
+                # invalid email, set error message and wipe variable
+                email_error = email_error + 'Invalid TLD.'
+                email = ''
 
         if not verify_password(pass1, pass2):
             # password doesn't meet requirements; set error and wipe variables
             password_error = """Password requirements: 8-20 length, 1 digit, 1 uppercase,
                                 and one special character."""
-            pass1 = ''
-            pass2 = ''
+#            pass1 = ''
+#            pass2 = ''
 
         # There's an error, so repopulate fields and let user start over
-        if email_error or password_error or email_error:
+        if email_error or password_error or password_match_error:
+            pass1 = ''
+            pass2 = ''
             return render_template('signup.html', user=user, email=email, pass1=pass1, pass2=pass2, email_error=email_error, password_error=password_error, password_match_error=password_match_error) # var=var=var=error=error=...
 
         # happy path; user wins, passes go, collects $200 (but not from me)
