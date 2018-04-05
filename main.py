@@ -35,6 +35,7 @@ def signup():
     pass2 = ''
     email = ''
 
+    user_error = ''
     email_error = ''
     password_error = ''
     password_match_error = ''
@@ -45,6 +46,10 @@ def signup():
         pass1 = cgi.escape(request.form['pass1'])
         pass2 = cgi.escape(request.form['pass2'])
         email = cgi.escape(request.form['email'])
+
+        if not user:
+            # no username entered
+            user_error = "Please enter a user name to proceed."
 
         if not pass1 == pass2:
             # passwords don't match; set error message
@@ -69,10 +74,10 @@ def signup():
                 email = ''
 
         # Wipe PW fields and let user try again
-        if email_error or password_error or password_match_error:
+        if user_error or email_error or password_error or password_match_error:
             pass1 = ''
             pass2 = ''
-            return render_template('signup.html', title='Signup',user=user, email=email, pass1=pass1, pass2=pass2, email_error=email_error, password_error=password_error, password_match_error=password_match_error) # var=var=var=error=error=...
+            return render_template('signup.html', title='Signup',user=user, email=email, pass1=pass1, pass2=pass2, user_error=user_error, email_error=email_error, password_error=password_error, password_match_error=password_match_error) # var=var=var=error=error=...
 
         # happy path; user wins, passes go, collects $200 (but not from me)
         # allows for rendering regardless of there being an email entered or not
